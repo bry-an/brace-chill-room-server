@@ -7,9 +7,13 @@ require('dotenv').config();
 
 const app = express();
 
-app.use(cors);
+app.use(cors());
 
 const PORT = process.env.PORT || 3001;
+app.get('/', (req, res) => {
+  res.send('<h1>HEALTHY!</h1>');
+});
+
 
 const generateRandomString = (length) => {
   let text = '';
@@ -25,12 +29,8 @@ const stateKey = 'spotify_auth_state';
 
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
-const redirect_uri = process.env.REDIRECT_URI || 'http://localhost:5000/callback';
+const redirect_uri = 'http://localhost:3001/callback/';
 
-
-app.get('/', (req, res) => {
-  res.send('<h1>HEALTHY!</h1>');
-});
 
 app.get('/login', (req, res) => {
   const state = generateRandomString(16);
@@ -129,7 +129,6 @@ app.get('/refresh_token', (req, res) => {
     }
   });
 });
-
 
 app.listen(PORT, () => {
   console.log(`Brace server is listening on port ${PORT}!`);
