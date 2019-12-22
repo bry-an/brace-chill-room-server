@@ -114,6 +114,8 @@ app.get('/callback', async (req, res) => {
 app.get('/refresh_token', (req, res) => {
   // requesting access token from refresh token
   const { refresh_token } = req.query;
+  const { origin } = req.query;
+  console.log('req that query', req.quer);
   const authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: { Authorization: `Basic ${new Buffer(`${client_id}:${client_secret}`).toString('base64')}` },
@@ -125,11 +127,13 @@ app.get('/refresh_token', (req, res) => {
   };
 
   request.post(authOptions, (error, response, body) => {
+    if (error) {
+      console.log('refresh error ', error);
+    }
+    // console.log('refresh response', response);
     if (!error && response.statusCode === 200) {
       const { access_token } = body;
-      res.send({
-        access_token,
-      });
+      res.redirect(`${origin}auth-callback/?origin=${origin}&token=${access_token}`);
     }
   });
 });
