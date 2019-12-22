@@ -7,7 +7,10 @@ require('dotenv').config();
 
 const app = express();
 
-app.use(cors());
+app.use(express.static(`${__dirname}/public`))
+  .use(cors())
+  .use(cookieParser());
+
 
 const PORT = process.env.PORT || 3001;
 app.get('/', (req, res) => {
@@ -29,7 +32,7 @@ const stateKey = 'spotify_auth_state';
 
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
-const redirect_uri = 'http://localhost:3001/callback/';
+const redirect_uri = 'http://localhost:3001/callback';
 
 
 app.get('/login', (req, res) => {
